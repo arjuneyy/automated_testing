@@ -1,22 +1,28 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.webdriver import WebDriver
+
 
 class BaseHelper:
     __TIMEOUT = 10
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver) -> None:
         super().__init__()
         self._driver_wait = WebDriverWait(driver, BaseHelper.__TIMEOUT)
         self._driver = driver
 
-    def open(self, url):
+    @property
+    def driver(self) -> WebDriver:
+        return self._driver
+
+    def open(self, url: str) -> None:
         self._driver.get(url)
 
-    def maximize(self):
+    def maximize(self) -> None:
         self._driver.maximize_window()
 
-    def close(self):
+    def close(self) -> None:
         self._driver.quit()
 
     # Helper functions that are used to identify the web locators in Selenium Python tutorial
