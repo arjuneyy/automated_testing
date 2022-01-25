@@ -34,3 +34,6 @@ class BaseHelper:
 
     def find_by_id(self, id):
         return self._driver_wait.until(EC.visibility_of_element_located((By.ID, id)))
+
+    def find_by_tag_name(self, tag_name: str):
+        return self._driver_wait.until(EC.visibility_of_element_located((By.TAG_NAME, tag_name)))

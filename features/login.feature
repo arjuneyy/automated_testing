@@ -1,11 +1,11 @@
-Feature: TS_00001 Login Page
+Feature: TS_000001 Login Page
  Scenario: Title should be properly set
   Given website url "http://127.0.0.1:8080"
   When accessing the website
   Then title should be "Mamsar Inventory & Monitoring System"
 
  Scenario: Login should fail providing empty credentials
-  Given unregistered user credentials username "None" and password "None"
+  Given user credentials username "None" and password "None"
    And username input field id "username"
    And password input field id "password"
    And login button xpath "//*[@id='login-form']/button"
@@ -15,7 +15,7 @@ Feature: TS_00001 Login Page
    And "Empty fields!" should be thrown in console log
 
  Scenario: Login should fail for unregistered users
-  Given unregistered user credentials username "user1" and password "password"
+  Given user credentials username "user1" and password "password"
    And username input field id "username"
    And password input field id "password"
    And login button xpath "//*[@id='login-form']/button"
@@ -25,7 +25,7 @@ Feature: TS_00001 Login Page
    And "login error!" should be thrown in console log
 
  Scenario: Login should fail for correct username but wrong password
-  Given unregistered user credentials username "Kasper" and password "wrong_password"
+  Given user credentials username "Kasper" and password "wrong_password"
    And username input field id "username"
    And password input field id "password"
    And login button xpath "//*[@id='login-form']/button"
@@ -35,7 +35,7 @@ Feature: TS_00001 Login Page
    And "login error!" should be thrown in console log
 
  Scenario: Login should fail for wrong username but correct password
-  Given unregistered user credentials username "Kasper" and password "wrong_password"
+  Given user credentials username "Kasper" and password "wrong_password"
    And username input field id "username"
    And password input field id "password"
    And login button xpath "//*[@id='login-form']/button"
@@ -45,7 +45,7 @@ Feature: TS_00001 Login Page
    And "login error!" should be thrown in console log
 
  Scenario: Successful login for users with correct credentials
-  Given unregistered user credentials username "Kasper" and password "Cain"
+  Given user credentials username "Kasper" and password "Cain"
    And username input field id "username"
    And password input field id "password"
    And login button xpath "//*[@id='login-form']/button"

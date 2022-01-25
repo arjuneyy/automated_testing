@@ -21,7 +21,7 @@ def step_impl(context, title: str):
 
 
 # Scenario: Failed login for unregistered users
-@given(u'unregistered user credentials username "{username}" and password "{password}"')
+@given(u'user credentials username "{username}" and password "{password}"')
 def step_impl(context, username: str, password: str):
     context.username = username if username != 'None' else ""
     context.password = password if password != 'None' else ""
