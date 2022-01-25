@@ -1,0 +1,4 @@
+mamsar_env
+.vscode
+.mypy_cache
+__pycache__
