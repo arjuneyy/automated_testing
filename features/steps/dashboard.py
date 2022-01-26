@@ -8,7 +8,34 @@ from selenium.common.exceptions import NoSuchElementException
 @given(u'access website')
 def step_impl(context):
     context.helper.open(context.url)
+    context.driver.save_screenshot('login.png')
 
+
+@given(u'add new user with access level "{access_level:d}" if not existing')
+def step_impl(context, access_level: int):
+    accounts = context.account_util.filter_by_(
+        account_username=context.username,
+        account_access_level=access_level)
+    if not accounts:
+        context.account_util.create_account(context.username,
+                                            context.password,
+                                            access_level)
+
+    accounts = context.account_util.filter_by_(
+        account_username=context.username,
+        account_access_level=access_level)
+
+    accounts.shouldnt.be.empty
+
+
+@then(u'delete newly added user with username "{username}" and access level "{access_level:d}"')
+def step_impl(context, username: str, access_level: int):
+    accounts = context.account_util.filter_by_(
+        account_username=username,
+        account_access_level=access_level)
+
+    accounts.shouldnt.be.empty
+    context.account_util.delete(accounts[0])
 
 # Scenario: User with either of the specified access level should have no modules in his/her dashboard
 @then(u'should have "{mod_cnt:d}" number of modules displayed in sidebar with id "{elem_id}"')
@@ -17,6 +44,7 @@ def step_impl(context, mod_cnt: int, elem_id: str):
     children = parent_elem.find_elements(By.TAG_NAME, 'button')
 
     len(children).should.be.equal(mod_cnt)
+
 
 @then(u'element with id "{elem_id}" should not be visible')
 def step_impl(context, elem_id: str):
@@ -36,6 +64,7 @@ def step_impl(context, parent_id: str):
     parent_elem = context.helper.find_by_id(parent_id)
     context.modules = [elem.text for elem in
                        parent_elem.find_elements(By.TAG_NAME, 'button')]
+
 
 @then(u'"{module}" module should be displayed')
 def step_impl(context, module: str):

@@ -4,6 +4,7 @@ from configparser import ConfigParser
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from features.steps.utils.helper_web import get_browser
+from features.steps.utils import UserAccountUtil
 from behave.model import Scenario
 from behave.runner import Context
 
@@ -18,8 +19,13 @@ def before_all(context: Context) -> None:
     context.helper = helper_func
     context.driver = helper_func.driver
 
+    # Setup account util
+    context.account_util = UserAccountUtil()
+
 
 def after_all(context: Context) -> None:
+    # Delete all users created when testing
+    context.account_util.delete_test_users()
     context.helper.close()
 
 

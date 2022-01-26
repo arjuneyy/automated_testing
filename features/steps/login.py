@@ -1,22 +1,27 @@
 import sure
 import time
+import os
+from dotenv import load_dotenv
 from behave import given, when, then
 
 
 # Scenario: Title should be properly set
-@given(u'website url "{url}"')
-def step_impl(context, url: str):
-    context.url = url
-
-
-@when(u'accessing the website')
+@given(u'website url from environment file')
 def step_impl(context):
-    pass
+    load_dotenv()
+
+    url = os.getenv('WEBSITE_URL')
+    url.shouldnt.be.none
+    context.url = str(url)
+
+
+@given(u'access the website')
+def step_impl(context):
+    context.helper.open(context.url)
 
 
 @then(u'title should be "{title}"')
 def step_impl(context, title: str):
-    context.helper.open(context.url)
     context.helper.driver.title.should.be.equal(title)
 
 
