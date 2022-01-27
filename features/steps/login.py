@@ -3,6 +3,9 @@ import time
 import os
 from dotenv import load_dotenv
 from behave import given, when, then
+from features.steps import constants as const
+from features.steps.utils import ElementUtil as ElemUtil
+from features.steps.utils.element_util import ElementUtil
 
 
 # Scenario: Title should be properly set
@@ -32,34 +35,23 @@ def step_impl(context, username: str, password: str):
     context.password = password if password != 'None' else ""
 
 
-@given(u'username input field id "{id}"')
-def step_impl(context, id: str):
-    context.txt_username = context.helper.find_by_id(id)
-
-
-@given(u'password input field id "{id}"')
-def step_impl(context, id: str):
-    context.txt_password = context.helper.find_by_id(id)
-
-
-@given(u'login button xpath "{x_path}"')
-def step_impl(context, x_path: str):
-    context.btn_login = context.helper.find_by_xpath(x_path)
-    context.btn_login_xpath = x_path
-
-
 @given(u'input user credentials')
 def step_impl(context):
-    context.txt_username.clear()
-    context.txt_password.clear()
-    context.txt_username.send_keys(context.username)
-    context.txt_password.send_keys(context.password)
+    txt_username = context.helper.find_by_id(const.TXT_USERNAME_ID)
+    txt_password = context.helper.find_by_id(const.TXT_PASSWORD_ID)
+
+    txt_username.clear()
+    txt_password.clear()
+    txt_username.send_keys(context.username)
+    txt_password.send_keys(context.password)
 
 
 @when(u'login button is clicked')
 def step_impl(context):
-    context.btn_login.click()
+    btn_login = context.helper.find_by_xpath(const.BTN_LOGIN_XPATH)
+    btn_login.click()
     time.sleep(1)
+
     context.console_log = [error.get('message')
                            for error in context.helper.driver
                            .get_log('browser')]
@@ -70,13 +62,24 @@ def step_impl(context):
     context.console_log.shouldnt.be.empty
 
 
-@then(u'"{error_msg}" should be thrown in console log')
-def step_impl(context, error_msg: str):
-    any(msg for msg in context.console_log if error_msg in msg)\
+@then(u'"Empty fields!" should be thrown in console log')
+def step_impl(context):
+    ElementUtil.is_err_in_console_log(context, const.CONSOLE_LOG_EMPTY_FIELDS)\
         .should.be.ok
 
 
-# Scenario: Successful login for users with correct credentials
-@then(u'element with id "{elem_id}" should be visible')
-def step_impl(context, elem_id: str):
-    context.helper.find_by_id(elem_id).is_displayed().should.be.ok
+@then(u'"login error!" should be thrown in console log')
+def step_impl(context):
+    ElemUtil.is_err_in_console_log(context, const.CONSOLE_LOG_LOGIN_ERROR)\
+        .should.be.ok
+
+
+@then(u'logout button should be visible')
+def step_impl(context):
+    ElemUtil.element_visibility_by_id(context, const.BTN_LOGOUT_ID).should.be.ok
+
+
+@then(u'sidebar should be visible')
+def step_impl(context):
+    ElemUtil.element_visibility_by_id(context, const.SIDEBAR_GROUP_ID)\
+        .should.be.ok

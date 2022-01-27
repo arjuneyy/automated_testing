@@ -14,7 +14,7 @@ def before_all(context: Context) -> None:
     my_file = (os.path.join(os.getcwd(), 'setup.cfg'))
     config.read(my_file)
 
-    # Reading the browser type from the configuration file for Selenium Python Tutorial
+    # Reading the browser type from the configuration file
     helper_func = get_browser(config.get('Environment', 'Browser'))
     context.helper = helper_func
     context.driver = helper_func.driver
